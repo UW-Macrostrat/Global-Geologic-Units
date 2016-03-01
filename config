@@ -1,0 +1,17 @@
+# The name of the application
+app_name: Stringed instruments
+
+# First and last name of the user
+user: Example User
+
+# The NLP product to run the application against
+product: NLP352
+
+# How often the application should be run
+frequency: weekly
+
+# A list of terms used to subset the corpus
+terms: [banjo, guitar, violin, viola, piano, cello]
+
+# Alternatively, a list of dictionaries can be provided in place of a list of terms
+dictionaries: [instruments]
