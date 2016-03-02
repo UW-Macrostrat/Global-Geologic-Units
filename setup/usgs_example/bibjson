@@ -1,0 +1,38 @@
+{
+  "success": {
+    "v": 1,
+    "data": [
+      {
+        "type": "article",
+        "id": "55b2ab84e138231cbdd6cdbd",
+        "sha1": [
+          "31f037a3c1dd2fc6dfa0b06c4f0ec111e68ae536"
+        ],
+        "title": "Echinoderms from Middle and Upper Ordovician rocks of Kentucky",
+        "volume": "",
+        "journal": "Professional Paper",
+        "link": [
+          {
+            "url": "https://www.sciencebase.gov/catalog/item/4f4e4a4ee4b07f02db627e5e",
+            "type": "publisher"
+          },
+          {
+            "url": [
+              "/data/downloads/USGS/4f4e4a4ee4b07f02db627e5e_report.pdf"
+            ],
+            "type": "filepath"
+          }
+        ],
+        "publisher": "USGS",
+        "author": [
+          {
+            "name": "Parsley, R. L."
+          }
+        ],
+        "pages": "",
+        "number": "",
+        "year": "1981"
+      }
+    ]
+  }
+}
