@@ -1,4 +1,4 @@
-# The name of the application
+# The name of the application (no spaces)
 app_name: stringed_instruments
 
 # First and last name of the user
