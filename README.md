@@ -29,7 +29,7 @@ export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 First, clone this repository and run the setup script:
 
 ````
-git clone https://github.com/UW-DeepDiveInfrastructure/app-template
+git clone https://github.com/UW-DeepDive-Infrastructure/app-template
 cd app-template
 make
 ````
