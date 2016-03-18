@@ -1,5 +1,5 @@
 # GeoDeepDive Application Template
-A template for building applications for [GeoDeepDive](https://geodeepdive.org)
+A template for building applications to extract information from published documents in the [GeoDeepDive](https://geodeepdive.org) infrastructure
 
 ## Getting started
 Dependencies:
@@ -9,7 +9,7 @@ Dependencies:
   + [PostgreSQL](http://www.postgresql.org/)
 
 ### OS X
-OS X ships with GNU Make, `git`, and Python, but you will need to install `pip` and PostgreSQL.
+OS X ships with GNU Make, `git`, and Python, but you will need to install `pip` and PostgreSQL. OS X is not a requirement, but development on a \*nix distribution is assumed here.
 
 To install `pip`:
 ````
