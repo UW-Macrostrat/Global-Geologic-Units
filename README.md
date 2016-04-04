@@ -75,7 +75,7 @@ The GeoDeepDive infrastructure will have the following software available:
 
 #### Submitting a config file
 The `config` file outlines a list of terms OR dictionaries that you are interested in culling from the corpus. Once you have
-updated this file, a private repository will be set up for you under the UW-DeepDiveInfrastructure Github group for you to
+updated this file, a private repository will be set up for you under the UW-DeepDive-Infrastructure Github group for you to
 push the code from this repository to. Your `config` file will be used to generate a custom testing subset of documents that
 you can use to develop your application.
 
