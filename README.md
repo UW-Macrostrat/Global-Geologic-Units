@@ -1,5 +1,5 @@
 # GeoDeepDive Application Template
-A template for building applications to extract information from published and pre-processed documents in the [GeoDeepDive](https://geodeepdive.org) infrastructure.
+A template for building applications to extract information from published and pre-processed documents in the [GeoDeepDive](https://geodeepdive.org) infrastructure. For general information about this infrastucture, see the <a href="https://geodeepdive.org/about.html" target="_blank">GeoDeepDive website</a>.
 
 ## Getting started
 Dependencies:
