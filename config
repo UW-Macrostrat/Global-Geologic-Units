@@ -15,6 +15,3 @@ frequency: weekly
 
 # A list of terms used to subset the corpus
 terms: [banjo, guitar, violin, viola, piano, cello]
-
-# Alternatively, a list of dictionaries can be provided in place of a list of terms
-dictionaries: [instruments]
