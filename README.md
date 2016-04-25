@@ -52,10 +52,10 @@ cat output/proper_nouns_with_adjectives
 
 ## Inputs
 The `./input` directory contains an example of the possible inputs. These include:
-
+  
   * Cuneiform OCR output (cuneiform-page-000\*.html)
   * Tesseract OCR output (page-\*.hocr.html)
-  * TSV dumps of sentence-level NLP processings with varying Stanford CoreNLP version and output formatting 
+  * TSV dumps of sentence-level NLP processings with varying Stanford CoreNLP version and output formatting. These can be imported into Postgres and be used by a DeepDive application.
   * bibjson file containing the article's bibliographic information.
 
  See `./input/README` for more details on each product.
