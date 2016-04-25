@@ -8,8 +8,10 @@ Dependencies:
   + [pip](https://pypi.python.org/pypi/pip)
   + [PostgreSQL](http://www.postgresql.org/)
 
+Instructions for OS X are provided below, but it is not a requirement. However, development on a \*nix distribution is assumed, and the applications developed with this template will be run on Ubuntu.
+
 ### OS X
-OS X ships with GNU Make, `git`, and Python, but you will need to install `pip` and PostgreSQL. OS X is not a requirement, but development on a \*nix distribution is assumed here. The GeoDeepDive infrastructure itself runs Ubuntu.
+OS X ships with GNU Make, `git`, and Python, but you will need to install `pip` and PostgreSQL.
 
 To install `pip`:
 ````
