@@ -28,8 +28,7 @@ proper_nouns_with_adj = {} # key: proper_noun, value: (adjective, sentence_id)
 
 # read all sentences from our NLP example database.
 cursor.execute("SELECT * FROM stringed_instruments_sentences_nlp352;")
-sentences = cursor.fetchall()
-for sentence in sentences:
+for sentence in cursor:
     sentid = sentence[1]
     words = sentence[3]
     poses = sentence[4]
