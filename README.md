@@ -1,5 +1,18 @@
 # GeoDeepDive Application Template
-A template for building applications to extract information from published and pre-processed documents in the [GeoDeepDive](https://geodeepdive.org) infrastructure. For general information about this infrastucture, see the <a href="https://geodeepdive.org/about.html" target="_blank">GeoDeepDive website</a>.
+A template and common set conventions for building applications to extract information from published and pre-processed documents in the [GeoDeepDive](https://geodeepdive.org) infrastructure. For general information about this infrastucture, see the [GeoDeepDive website](https://geodeepdive.org/about.html).
+
+## TL;DR
+1. Make a local copy of this repository
+2. Edit the `config` file with your application details
+3. Contact us to set up a private repository under the `UW-Deepdive-Infrastructure` group for you
+4. Add the repository created in step 3 as a remote and push your changes
+5. A testing subset will be created for you. We will let you know when it is ready and where to download it.
+6. Replace the data in the `./input` folder with the data created in step 5
+7. Write your application
+8. When you are confident that your application is ready to be run on the high throughput infrastructure against the corpus, commit and push your changes.
+9. We will then run your application at the defined interval and results will be committed to the `./output` folder
+10. Return to step 7 as needed
+
 
 ## Getting started
 Dependencies:
@@ -37,24 +50,28 @@ cd app-template-master
 make
 ````
 
-Edit `credentials` with the connection credentials for your local Postgres database.
+### Data sources
 
-To create a database with the data included in `./input`:
+#### Postgres
+While Postgres is not required to run applications, it is the preferred method. These instructions assume you have Postgres 9.x installed and running on your machine.
 
-````
-make local_setup
-````
+1. Edit `credentials` with the connection credentials for your local Postgres database.
 
-To run an example application and check its output:
+2. To create a database with the data included in `./input`, run `make local_setup`
+
+3. To run an example application and check its output, run the following:
 
 ```
 python run.py
 cat output/proper_nouns_with_adjectives
 ```
 
+#### Text files
+You can also use TSV dumps of the data, which are in the `./input` directory. However, be advised that data should be read into your application in a memory-friendly way to ensure that your application scales.
+
 ## Inputs
 The `./input` directory contains an example of the possible inputs. These include:
-  
+
   * Cuneiform OCR output (cuneiform-page-000\*.html)
   * Tesseract OCR output (page-\*.hocr.html)
   * TSV dumps of sentence-level NLP processings with varying Stanford CoreNLP version and output formatting. These can be imported into Postgres and be used by a DeepDive application.
@@ -69,7 +86,7 @@ matching the desired terms will be available within the `./input`.
 ## Running on GeoDeepDive Infrastructure
 All applications are required to have the same structure as this repository, namely an empty folder named `output`, a valid
 `config` file, an updated `requirements.txt` describing any Python dependencies, and `run.py` which runs the application
-and outputs results. The `credentials` file will be ignored and substituted with a unique version at run time. The `input` 
+and outputs results. The `credentials` file will be ignored and substituted with a unique version at run time. The `input`
 directory will similarly be substituted with the complete set of desired products matching the terms (or dictionary) specified.
 
 The GeoDeepDive infrastructure will have the following software available:
