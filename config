@@ -7,7 +7,7 @@ description : Find all the proper nouns which have adjectives modifying them. Du
 # First and last name of the user
 user: Example User
 
-# The NLP product to run the application against
+# The NLP product to run the application against (NLP, NLP352, OCR, Cuneiform -- see input/README for more info)
 product: NLP352
 
 # How often the application should be run

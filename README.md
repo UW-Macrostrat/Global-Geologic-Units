@@ -126,6 +126,14 @@ List of Python dependencies to be installed by `pip`
 #### run.py
 Python script that runs the entire application, including any setup tasks and exporting of results to the folder `./output`.
 
+## Common Pitfalls
+### postgres_cursor.fetchall()
+Reading data into/out of postgres tables is supported (and to an extent expected),
+but trying to read ALL results of a query into memory in one pass can be a very bad idea.
+It may work for the test dataset you have, but these are typically on the order of a few
+hundred documents. The full data set may be many orders of magnitude larger, and your application
+may run into memory issues if not handled properly. Instead, loop over the cursor row-by-row (i.e. 
+sentence-by-sentence).
 
 ## License
 CC-BY 4.0 International
