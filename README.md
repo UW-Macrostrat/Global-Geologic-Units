@@ -8,11 +8,21 @@ A template and common set conventions for building applications to extract infor
 4. Add the repository created in step 3 as a remote and push your changes
 5. A testing subset will be created for you. We will let you know when it is ready and where to download it.
 6. Replace the data in the `./input` folder with the data created in step 5
-7. Write your application
-8. When you are confident that your application is ready to be run on the high throughput infrastructure against the corpus, commit and push your changes.
-9. We will then run your application at the defined interval and results will be committed to the `./output` folder
+7. Write an application in a supported language (e.g., Python 2.7+)
+8. When your application is ready to be run on the high throughput infrastructure against the entire corpus, commit and push your changes.
+9. We will run your application at the defined interval and results will be committed to the `./output` folder
 10. Return to step 7 as needed
 
+## The Big Picture
+GeoDeepDive and this app-template provide the infrastructure required to do the following:
+
+1. Identify documents of potential interest to a project based on simple string matching
+2. Generate a testing and developent dataset consisting of NLP/OCR output for a subset of these documents
+3. Run an app-template-based application, written by you, against all of the potentially relevant documents 
+4. Periodically re-run the application, and/or new versions of the application, to generate new results
+5. Provide full citations and links to all original document sources supplying information
+
+Currently, using this infrastructure requires communication/active collaboration with the [GeoDeepDive team](https://geodeepdive.org/people.html). 
 
 ## Getting started
 Dependencies:
