@@ -34,7 +34,7 @@ Dependencies:
 Instructions for OS X are provided below, but it is not a requirement. However, development on a \*nix distribution is assumed, and the applications developed with this template will be run on Ubuntu.
 
 ### OS X
-OS X ships with GNU Make, `git`, and Python, but you will need to install `pip` and PostgreSQL.
+OS X is not required and our infrastructure is Linux-based. Mac OS X is a common *nix distribution that ships with GNU Make, `git`, and Python, but OS X users will need to install `pip` and PostgreSQL.
 
 To install `pip`:
 ````
@@ -63,7 +63,7 @@ make
 ### Data sources
 
 #### Postgres
-While Postgres is not required to run applications, it is the preferred method. These instructions assume you have Postgres 9.x installed and running on your machine.
+Postgres is not required to run applications, but it is the preferred method. These instructions assume you have Postgres 9.x installed and running on your machine.
 
 1. Edit `credentials` with the connection credentials for your local Postgres database.
 
