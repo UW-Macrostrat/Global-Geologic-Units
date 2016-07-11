@@ -15,3 +15,6 @@ frequency: weekly
 
 # A list of terms used to subset the corpus
 terms: [banjo, guitar, violin, viola, piano, cello]
+
+# should the list of terms be case-sensitive?
+case-sensitive: false
