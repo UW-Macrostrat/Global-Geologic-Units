@@ -10,10 +10,10 @@ import yaml
 import psycopg2
 from psycopg2.extensions import AsIs
 
-with open('./credentials', 'r') as credential_yaml:
+with open('./credentials.yml', 'r') as credential_yaml:
     credentials = yaml.load(credential_yaml)
 
-with open('./config', 'r') as config_yaml:
+with open('./config.yml', 'r') as config_yaml:
     config = yaml.load(config_yaml)
 
 # Connect to Postgres
@@ -54,4 +54,3 @@ for sentence in sentences:
 with open("./output/proper_nouns_with_adjectives", "w") as fout:
     for proper_noun in proper_nouns_with_adj.keys():
         fout.write("%s - %s\n" % (proper_noun, proper_nouns_with_adj[proper_noun]))
-
