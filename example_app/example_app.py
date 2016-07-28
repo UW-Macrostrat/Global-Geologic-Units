@@ -1,5 +1,5 @@
 """
-File: run.py
+File: example_app.py
 Description: Example app utilizing the GeoDeepDive infrastructure and products.
     This will look at the produced NLP table and print a list of proper nouns which
     are modified by adjectives, along with the sentence id in which they occur.
@@ -10,10 +10,10 @@ import yaml
 import psycopg2
 from psycopg2.extensions import AsIs
 
-with open('./credentials.yml', 'r') as credential_yaml:
+with open('../credentials.yml', 'r') as credential_yaml:
     credentials = yaml.load(credential_yaml)
 
-with open('./config.yml', 'r') as config_yaml:
+with open('../config.yml', 'r') as config_yaml:
     config = yaml.load(config_yaml)
 
 # Connect to Postgres
@@ -28,8 +28,7 @@ proper_nouns_with_adj = {} # key: proper_noun, value: (adjective, sentence_id)
 
 # read all sentences from our NLP example database.
 cursor.execute("SELECT * FROM stringed_instruments_sentences_nlp352;")
-sentences = cursor.fetchall()
-for sentence in sentences:
+for sentence in cursor:
     sentid = sentence[1]
     words = sentence[3]
     poses = sentence[4]
@@ -37,9 +36,9 @@ for sentence in sentences:
     proper_nouns = [] # list of proper nouns
     adjectives = [] # list of adjectives
     for idx, pos in enumerate(poses): # look for proper nouns and adjectives
-        if pos=="NNP":
+        if pos == "NNP":
             proper_nouns.append(idx)
-        elif pos=="JJ":
+        elif pos == "JJ":
             adjectives.append(idx)
     for idx, parent in enumerate(dep_parents): # loop over dependencies to look for adjectives which relate to a proper noun
         # within the table, the dep_parents is indexed from 1.  Our internal
@@ -51,6 +50,6 @@ for sentence in sentences:
                 proper_nouns_with_adj[words[parent-1]] = [(words[idx], sentid)]
 
 # write results to the output directory
-with open("./output/proper_nouns_with_adjectives", "w") as fout:
+with open("../output/proper_nouns_with_adjectives", "w") as fout:
     for proper_noun in proper_nouns_with_adj.keys():
         fout.write("%s - %s\n" % (proper_noun, proper_nouns_with_adj[proper_noun]))

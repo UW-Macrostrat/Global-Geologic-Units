@@ -129,21 +129,15 @@ an error was encountered or your application did not run successfully any errors
 
 ## File Summary
 
-#### config
+#### config.yml
 A YAML file that contains project settings.
 
 
-#### credentials
+#### credentials.yml
 A YAML file that contains local postgres credentials for testing and generating examples.
 
-
-#### requirements.txt
-List of Python dependencies to be installed by `pip`
-
-
-#### run.py
-Python script that runs the entire application, including any setup tasks and exporting of results to the folder `./output`.
-
+#### run
+A bash file that contains instructions for which script(s) or processes to run. The entry point to your application.
 
 ## License
 CC-BY 4.0 International

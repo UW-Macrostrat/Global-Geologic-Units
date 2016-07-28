@@ -1,5 +1,5 @@
 all:
-	cp credentials.example credentials;
+	cp credentials.yml.example credentials.yml;
 	pip install -r requirements.txt;
 
 
