@@ -1,5 +1,5 @@
 # Available inputs
-These are the available input files that are part of a standard input dataset for GeoDeepDive applications.
+These are the available input files that are part of a standard input dataset for GeoDeepDive applications. You can find an example set at [https://geodeepdive.org/dev_subsets/example_input.zip](https://geodeepdive.org/dev_subsets/example_input.zip).
 
 
 ## contents
