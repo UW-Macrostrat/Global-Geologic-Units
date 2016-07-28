@@ -2,6 +2,16 @@
 A template and common set conventions for building applications to extract information from published and pre-processed documents in the [GeoDeepDive](https://geodeepdive.org) infrastructure. For general information about this infrastucture, see the [GeoDeepDive website](https://geodeepdive.org/about.html).
 
 ## TL;DR
+1. Fork this repository to your account (click the "Fork" button in the upper right corner)
+2. Edit `config.yml` with your application's details
+3. Download the example data
+4. When you are ready for a testing subset send us an email
+5. Download the testing subset
+6. Write your application
+7. When you are confident that your application is ready to be run our infrastructure against the corpus, notify us
+8. We will pull your application on to our infrastructure and run it
+
+
 1. Make a local copy of this repository
 2. Edit the `config` file with your application details
 3. Contact us to set up a private repository under the `UW-Deepdive-Infrastructure` group for you
@@ -70,7 +80,15 @@ cat output/proper_nouns_with_adjectives
 You can also use TSV dumps of the data, which are in the `./input` directory. However, be advised that data should be read into your application in a memory-friendly way to ensure that your application scales.
 
 ## Inputs
-The `./input` directory contains an example of the possible inputs. These include:
+First, download and extract the example input data:
+
+````
+curl -o example_input.zip https://geodeepdive.org/dev_subsets/example_input.zip
+unzip -j example_input.zip -d ./input
+rm example_input.zip
+````
+
+The `./input` directory now contains an example of the possible inputs. These include:
 
   * Cuneiform OCR output (cuneiform-page-000\*.html)
   * Tesseract OCR output (page-\*.hocr.html)
