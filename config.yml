@@ -10,9 +10,6 @@ user: Example User
 # Your email
 email: example.user@geodeepdive.org
 
-# The NLP product to run the application against
-product: NLP352
-
 # The primary language the application is written in - will be used for installing dependencies
 # Current options are Python, R, and Go
 language: Python
