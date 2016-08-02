@@ -1,0 +1,20 @@
+# The name of the application (no spaces)
+app_name: stringed_instruments
+
+# A brief description of the app.
+description : Find all the proper nouns which have adjectives modifying them. Dump the nouns and the adjectives into a text file.
+
+# First and last name of the user
+user: Example User
+
+# The NLP product to run the application against (NLP, NLP352, OCR, Cuneiform -- see input/README for more info)
+product: NLP352
+
+# How often the application should be run
+frequency: weekly
+
+# A list of terms used to subset the corpus
+terms: [banjo, guitar, violin, viola, piano, cello]
+
+# should the list of terms be case-sensitive?
+case-sensitive: false
