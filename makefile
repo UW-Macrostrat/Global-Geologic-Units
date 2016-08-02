@@ -1,7 +1,5 @@
 all:
-	cp credentials.example credentials;
-	pip install -r requirements.txt;
-
+	cp credentials.yml.example credentials.yml;
 
 
 local_setup:
