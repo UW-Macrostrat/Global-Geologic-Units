@@ -17,7 +17,7 @@ function parse_yaml {
 }
 
 eval $(parse_yaml credentials.yml)
-eval $(parse_yaml config)
+eval $(parse_yaml config.yml)
 
 pwd=$(pwd)
 
