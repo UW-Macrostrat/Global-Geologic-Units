@@ -5,4 +5,5 @@ Check out [the wiki](https://github.com/UW-Deepdive-Infrastructure/app-template/
 
 
 ## License
-CC-BY 4.0 International
+CC-BY 4.0 International for application exceuction on GDD infrastructure applied to open access documents 
+CC-BY-NC 4.0 International for application exceuction on GDD infrastructure applied to select non-open access documents 
