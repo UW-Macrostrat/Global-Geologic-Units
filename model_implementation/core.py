@@ -10,6 +10,7 @@ import yaml
 import psycopg2
 from psycopg2.extensions import AsIs
 from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
 from os.path import join, dirname
 __here__ = dirname(__file__)
 
@@ -23,12 +24,11 @@ with open_relative('../credentials.yml') as credential_yaml:
 with open_relative('../config.yml') as config_yaml:
     config = yaml.load(config_yaml)
 
-pg_cred = credentials['postgres']
-
-engine = create_engine(
+conn_string = URL(
     drivername='postgres',
-    **pg_cred
-)
+    **credentials['postgres'])
+
+engine = create_engine(conn_string)
 
 import IPython; IPython.embed(); raise
 

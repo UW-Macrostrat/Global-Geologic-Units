@@ -1,0 +1,5 @@
+#!/bin/bash
+
+here=${BASH_SOURCE:-$0}
+# The command used to run your application
+python $(dirname $here)/../model_implementation/core.py

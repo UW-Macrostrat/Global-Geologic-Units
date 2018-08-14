@@ -1,3 +1,4 @@
+#!/bin/bash
 # via http://stackoverflow.com/a/21189044/1956065
 function parse_yaml {
    local prefix=$2
@@ -19,20 +20,22 @@ function parse_yaml {
 eval $(parse_yaml credentials.yml)
 eval $(parse_yaml config.yml)
 
-pwd=$(pwd)
+here=${BASH_SOURCE:-$0}
+# The command used to run your application
+pwd="$(realpath $(dirname $here)/..)"
 
 # Function to apply SQL to the database configured above
 function sql {
   proc=$1
   [ $# -eq 0 ] && proc=$(cat -)
   # Print colored SQL
-  echo '\033[0;36m'$proc'\033[0m'
-  echo $proc | psql -U $postgres__user -h $postgres__host \
+  echo -e "\033[0;36m"$proc"\033[0m"
+  echo $proc | psql -U $postgres__username -h $postgres__host \
                  -p $postgres__port $postgres__database
 }
 
 # Create the database - if it exists an error will be thrown which can be ignored
-createdb $postgres__database -h $postgres__host -U $postgres__user -p $postgres__port
+createdb $postgres__database -h $postgres__host -U $postgres__username -p $postgres__port
 
 # Vanilla NLP
 sql <<-EOF
