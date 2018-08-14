@@ -1,9 +1,9 @@
 all: local_setup
 
-.PHONY: install data local_setup
+.PHONY: install test_data training_data local_setup
 
-local_setup: data
-	./setup/setup.sh
+local_setup:
+	./bin/setup-app
 
 install:
 	pip install -r example_app/requirements.txt
@@ -11,7 +11,8 @@ install:
 test_data:
 	curl https://geodeepdive.org/dev_subsets/example_input.zip | tar -xf - -C .
 
-test_data2:
+training_data:
 	# Test data for volcanic ash provided by Ian Ross
-	curl https://geodeepdive.org/dev_subsets/volcanic_ash_intervals_overlap.zip | tar -xf - -C input
+	mkdir input
+	cd input; curl https://geodeepdive.org/dev_subsets/volcanic_ash_intervals_overlap.zip | tar -xf - -C .
 
