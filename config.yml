@@ -21,4 +21,4 @@ language: Python
 # ???? What is the difference between a dictionary and term???
 dictionaries: [units]
 
-terms: [ignimbrite, ash fall, tuff]
+terms: [ignimbrite, ash, tuff, welded, phonolite, ashflow, volcanic ash]

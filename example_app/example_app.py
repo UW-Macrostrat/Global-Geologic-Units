@@ -9,6 +9,7 @@ Assumes: make setup-local has been run (so that the example database is populate
 import yaml
 import psycopg2
 from psycopg2.extensions import AsIs
+from sqlalchemy import create_engine
 from os.path import join, dirname
 __here__ = dirname(__file__)
 
@@ -22,12 +23,15 @@ with open_relative('../credentials.yml') as credential_yaml:
 with open_relative('../config.yml') as config_yaml:
     config = yaml.load(config_yaml)
 
-# Connect to Postgres
-connection = psycopg2.connect(
-    dbname=credentials['postgres']['database'],
-    user=credentials['postgres']['user'],
-    host=credentials['postgres']['host'],
-    port=credentials['postgres']['port'])
+pg_cred = credentials['postgres']
+
+engine = create_engine(
+    drivername='postgres',
+    **pg_cred
+)
+
+import IPython; IPython.embed(); raise
+
 cursor = connection.cursor()
 
 proper_nouns_with_adj = {} # key: proper_noun, value: (adjective, sentence_id)
