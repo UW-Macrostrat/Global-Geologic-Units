@@ -10,7 +10,7 @@ function parse_yaml {
       vname[indent] = $2;
       for (i in vname) {if (i > indent) {delete vname[i]}}
       if (length($3) > 0) {
-         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
+         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("__")}
          printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
       }
    }'
