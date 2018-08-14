@@ -1,14 +1,14 @@
 # The name of the application (no spaces)
-app_name: stringed_instruments
+app_name: ignimbrites
 
 # A brief description of the app.
-description : Find all the proper nouns which have adjectives modifying them. Dump the nouns and the adjectives into a text file.
+description : Find all the ignimbrites.
 
 # Your first and last name
-user: Example User
+user: Daven Quinn
 
 # Your email
-email: example.user@geodeepdive.org
+email: daven.quinn@wisc.edu
 
 # The primary language the application is written in - will be used for installing dependencies
 # Current options are Python, R, and Go
@@ -17,6 +17,8 @@ language: Python
 # You can choose to specify a list of dictionaries, a list of terms, or both.
 # If both dictionaries and terms are provided, all terms in the dictionary PLUS
 # all listed terms will be used
-dictionaries: [instruments]
+#
+# ???? What is the difference between a dictionary and term???
+dictionaries: [units]
 
-terms: [theremin]
+terms: [ignimbrite, ash fall, tuff]
