@@ -9,11 +9,17 @@ Assumes: make setup-local has been run (so that the example database is populate
 import yaml
 import psycopg2
 from psycopg2.extensions import AsIs
+from os.path import join, dirname
+__here__ = dirname(__file__)
 
-with open('../credentials.yml', 'r') as credential_yaml:
+def open_relative(fn, mode='r'):
+    fn = join(__here__, fn)
+    return open(fn, mode)
+
+with open_relative('../credentials.yml') as credential_yaml:
     credentials = yaml.load(credential_yaml)
 
-with open('../config.yml', 'r') as config_yaml:
+with open_relative('../config.yml') as config_yaml:
     config = yaml.load(config_yaml)
 
 # Connect to Postgres
@@ -50,6 +56,6 @@ for sentence in cursor:
                 proper_nouns_with_adj[words[parent-1]] = [(words[idx], sentid)]
 
 # write results to the output directory
-with open("../output/proper_nouns_with_adjectives", "w") as fout:
+with open_relative("../output/proper_nouns_with_adjectives", "w") as fout:
     for proper_noun in proper_nouns_with_adj.keys():
         fout.write("%s - %s\n" % (proper_noun, proper_nouns_with_adj[proper_noun]))
