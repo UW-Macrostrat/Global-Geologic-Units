@@ -12,6 +12,7 @@ from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.engine.url import URL
 from os.path import join, dirname
+from .sentence import Sentence
 __here__ = dirname(__file__)
 
 def open_relative(fn, mode='r'):
@@ -37,31 +38,19 @@ session = Session(bind=conn)
 __tablename = config['app_name']+'_sentences_nlp352'
 sentences = Table(__tablename, meta, autoload=True)
 
-res = session.query(sentences)
-
-def intersects(arr1, arr2):
-    for word in arr2:
-        if word in arr1:
-            return True
-    return False
-
 ignimbrite_terms = ['ignimbrite','welded','tuff']
 
+# Filter by lemmas using the PostgreSQL engine directly
+# This is much quicker than filtering in Python.
+res = session.query(sentences).filter(
+    sentences.c.lemmas.overlap(ignimbrite_terms))
+
 count=0
-for sentence in res:
+for row in res:
+    sentence = Sentence(row)
 
-    if not intersects(sentence.words, ignimbrite_terms):
-        continue
     count+=1
-    joined=" ".join(sentence.words)
-    subs = [(" ,", ","),
-            ("-LRB- ","("),
-            (" -RRB-",")"),
-            ("-LSB- ","["),
-            (" -RSB-","]")]
-    for s in subs:
-        joined=joined.replace(*s)
 
-    print(count, joined)
+    print(count, str(sentence))
     print(" ")
 
