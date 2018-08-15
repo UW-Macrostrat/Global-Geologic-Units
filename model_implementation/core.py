@@ -7,9 +7,9 @@ Assumes: make setup-local has been run (so that the example database is populate
 """
 
 import yaml
-import psycopg2
 from psycopg2.extensions import AsIs
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData, Table
+from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.engine.url import URL
 from os.path import join, dirname
 __here__ = dirname(__file__)
@@ -28,38 +28,40 @@ conn_string = URL(
     drivername='postgres',
     **credentials['postgres'])
 
+Session = sessionmaker()
 engine = create_engine(conn_string)
-
-import IPython; IPython.embed(); raise
-
-cursor = connection.cursor()
-
-proper_nouns_with_adj = {} # key: proper_noun, value: (adjective, sentence_id)
-
+conn = engine.connect()
+meta=MetaData(bind=conn)
+session = Session(bind=conn)
 # read all sentences from our NLP example database.
-cursor.execute("SELECT * FROM %(app_name)s_sentences_nlp352;", {"app_name" : AsIs(config["app_name"])},)
-for sentence in cursor:
-    sentid = sentence[1]
-    words = sentence[3]
-    poses = sentence[4]
-    dep_parents = sentence[8]
-    proper_nouns = [] # list of proper nouns
-    adjectives = [] # list of adjectives
-    for idx, pos in enumerate(poses): # look for proper nouns and adjectives
-        if pos == "NNP":
-            proper_nouns.append(idx)
-        elif pos == "JJ":
-            adjectives.append(idx)
-    for idx, parent in enumerate(dep_parents): # loop over dependencies to look for adjectives which relate to a proper noun
-        # within the table, the dep_parents is indexed from 1.  Our internal
-        # indexing is from 0, so subtract one.
-        if idx in adjectives and parent-1 in proper_nouns:
-            if words[parent-1] in proper_nouns_with_adj:
-                proper_nouns_with_adj[words[parent-1]].append((words[idx], sentid))
-            else:
-                proper_nouns_with_adj[words[parent-1]] = [(words[idx], sentid)]
+__tablename = config['app_name']+'_sentences_nlp352'
+sentences = Table(__tablename, meta, autoload=True)
 
-# write results to the output directory
-with open_relative("../output/proper_nouns_with_adjectives", "w") as fout:
-    for proper_noun in proper_nouns_with_adj.keys():
-        fout.write("%s - %s\n" % (proper_noun, proper_nouns_with_adj[proper_noun]))
+res = session.query(sentences)
+
+def intersects(arr1, arr2):
+    for word in arr2:
+        if word in arr1:
+            return True
+    return False
+
+ignimbrite_terms = ['ignimbrite','welded','tuff']
+
+count=0
+for sentence in res:
+
+    if not intersects(sentence.words, ignimbrite_terms):
+        continue
+    count+=1
+    joined=" ".join(sentence.words)
+    subs = [(" ,", ","),
+            ("-LRB- ","("),
+            (" -RRB-",")"),
+            ("-LSB- ","["),
+            (" -RSB-","]")]
+    for s in subs:
+        joined=joined.replace(*s)
+
+    print(count, joined)
+    print(" ")
+
