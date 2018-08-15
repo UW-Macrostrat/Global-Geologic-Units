@@ -4,5 +4,6 @@ CREATE TABLE ignimbrite_unit (
   sentid integer,
   name text,
   short_name text,
-  position text
+  position text,
+  period text
 );

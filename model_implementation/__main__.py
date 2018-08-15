@@ -6,6 +6,8 @@ Assumes: make setup-local has been run (so that the example database is populate
 """
 import click
 import IPython
+from urllib.request import urlretrieve
+from tempfile import NamedTemporaryFile
 
 from .database import session, nlp, reflect_table, run_query
 from .sentence import Sentence
@@ -56,6 +58,9 @@ def units():
     res = session.query(nlp).filter(
         nlp.c.lemmas.overlap(unit_types))
 
+    # Get unit periods from macrostrat
+    periods = [r[0] for r in run_query('get_periods')]
+
     for row in res:
         sentence = Sentence(row)
         # iterate pairwise through units, as each `unit_type`
@@ -68,6 +73,8 @@ def units():
 
             # Upper, middle, lower, etc.
             position = None
+            # Period
+            period = None
 
             # Hack to allow continue from within while loop
             # ...there is probably a cleaner way to do this
@@ -85,6 +92,12 @@ def units():
                     # Filter out upper, middle lower
                     position = str(prev)
                     break
+                if prev.lemma in periods:
+                    # The unit is preceded with an identified geological period
+                    period = str(prev)
+                    break
+                if prev.lemma in age_terms:
+                    break
 
                 # Build an array back to front catching multiword units
                 __.append(prev)
@@ -99,10 +112,19 @@ def units():
                 name=name,
                 short_name=" ".join(str(i) for i in __[:-1]),
                 position=position,
+                period=period,
                 docid=sentence.document,
                 sentid=sentence.id)
             session.execute(stmt)
     session.commit()
+
+@cli.command(name='load-macrostrat')
+def load_macrostrat():
+    "Load macrostrat data into database"
+    with NamedTemporaryFile(delete=True) as f:
+        urlretrieve("https://macrostrat.org/api/defs/intervals?all&format=csv", f.name)
+        run_query("create_periods_table", filename=f.name)
+
 
 if __name__ == '__main__':
     cli()

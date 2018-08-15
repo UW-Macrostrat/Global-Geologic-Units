@@ -35,7 +35,7 @@ def reflect_table(name):
 __tablename = config['app_name']+'_sentences_nlp352'
 nlp = reflect_table(__tablename)
 
-def run_query(sqlfile):
+def run_query(sqlfile, **kw):
     if not sqlfile.endswith('.sql'):
         # We have a query identifier rather than a path
         # Queries are stored in the `sql` subdirectory
@@ -43,4 +43,4 @@ def run_query(sqlfile):
     with open(sqlfile) as f:
         sql = f.read()
     secho(sql,fg='cyan')
-    return session.execute(text(sql))
+    return conn.execute(text(sql), **kw)

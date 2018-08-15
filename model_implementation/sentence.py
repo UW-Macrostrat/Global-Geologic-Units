@@ -31,6 +31,8 @@ class Word(object):
             return False
         if self.pose in ['NNP','NNPS']:
             return True
+        if self.pose == 'NN' and self.text[0].isupper():
+            return True
         return False
 
     @property
