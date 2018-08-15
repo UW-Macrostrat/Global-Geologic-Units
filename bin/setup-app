@@ -37,9 +37,17 @@ function sql {
 # Create the database - if it exists an error will be thrown which can be ignored
 createdb $postgres__database -h $postgres__host -U $postgres__username -p $postgres__port
 
-# Vanilla NLP
+# DROP TABLES to rebuild
 sql <<-EOF
 DROP TABLE IF EXISTS ${app_name}_sentences_nlp;
+DROP TABLE IF EXISTS ${app_name}_sentences_nlp352;
+DROP TABLE IF EXISTS ${app_name}_sentences_nlp352_bazaar;
+EOF
+
+nlp=$pwd/input/sentences_nlp
+if [ -f $nlp ]; then
+# Vanilla NLP
+sql <<-EOF
 CREATE TABLE ${app_name}_sentences_nlp (
   docid text,
   sentid integer,
@@ -54,12 +62,13 @@ CREATE TABLE ${app_name}_sentences_nlp (
   layout text[]
 )
 EOF
-
-sql "COPY ${app_name}_sentences_nlp FROM '$pwd/input/sentences_nlp'"
+sql "COPY ${app_name}_sentences_nlp FROM '$nlp'"
+fi
 
 # NLP352
+nlp=$pwd/input/sentences_nlp352
+if [ -f $nlp ]; then
 sql <<-EOF
-DROP TABLE IF EXISTS ${app_name}_sentences_nlp352;
 CREATE TABLE ${app_name}_sentences_nlp352 (
   docid text,
   sentid integer,
@@ -72,12 +81,14 @@ CREATE TABLE ${app_name}_sentences_nlp352 (
   dep_parents integer[]
 );
 EOF
+sql "COPY ${app_name}_sentences_nlp352 FROM '$nlp'"
+fi
 
-sql "COPY ${app_name}_sentences_nlp352 FROM '$pwd/input/sentences_nlp352'"
 
 # NLP352 Bazaar
+nlp=$pwd/input/sentences_nlp352_bazaar
+if [ -f $nlp ]; then
 sql <<-EOF
-DROP TABLE IF EXISTS ${app_name}_sentences_nlp352_bazaar;
 CREATE TABLE ${app_name}_sentences_nlp352_bazaar (
   docid text,
   sentid integer,
@@ -91,5 +102,5 @@ CREATE TABLE ${app_name}_sentences_nlp352_bazaar (
   dep_parents integer[]
 );
 EOF
-
-sql "COPY ${app_name}_sentences_nlp352_bazaar FROM '$pwd/input/sentences_nlp352_bazaar'"
+sql "COPY ${app_name}_sentences_nlp352_bazaar FROM '$nlp'"
+fi
