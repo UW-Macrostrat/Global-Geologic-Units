@@ -25,19 +25,30 @@ class Word(object):
         return f"{self.text}: {self.pose}, {self.ner}"
 
     @property
+    def is_proper_noun(self):
+        return self.pose in ['NNP','NNPS']
+
+    @property
     def parent(self):
         if self.dep_parent is None:
             return None
-        return self.sentence.words[self.dep_parent]
+        return self.sentence[self.dep_parent]
 
     @property
     def tree(self):
         p = self.parent
         txt = str(self)
+        txt += f" ({self.pose} {self.ner})"
         while p is not None:
             txt += " → "+str(p)
             p = p.parent
         return txt
+
+    def previous(self):
+        ix = self.index-1
+        if ix == -1:
+            return None
+        return self.sentence[ix]
 
 class Sentence(object):
     def __init__(self, sentence):
@@ -47,6 +58,7 @@ class Sentence(object):
         """
         self.__raw__ = sentence
         r = self.__raw__
+        self.lemmas = r.lemmas
         self.words = []
         for i, word in enumerate(sentence.words):
             w = Word(
@@ -77,9 +89,17 @@ class Sentence(object):
             joined=joined.replace(*s)
         return joined
 
+    @property
+    def document(self):
+        return self.__raw__.docid
+
+    @property
+    def id(self):
+        return self.__raw__.sentid
+
     def print_breakdown(self):
         for word in self.words:
-            print(repr(word))
+            print(word.tree)
 
     def __iter__(self):
         return (s for s in self.words)
