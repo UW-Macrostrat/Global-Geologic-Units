@@ -26,9 +26,14 @@ engine = create_engine(conn_string)
 conn = engine.connect()
 meta=MetaData(bind=conn)
 session = Session(bind=conn)
+
+def reflect_table(name):
+    "Use SQLAlchemy to reflect the database table schema"
+    return Table(name, meta, autoload=True)
+
 # read all sentences from our NLP example database.
 __tablename = config['app_name']+'_sentences_nlp352'
-nlp = Table(__tablename, meta, autoload=True)
+nlp = reflect_table(__tablename)
 
 def run_query(sqlfile):
     if not sqlfile.endswith('.sql'):

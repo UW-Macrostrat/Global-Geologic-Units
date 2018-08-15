@@ -7,49 +7,51 @@ Assumes: make setup-local has been run (so that the example database is populate
 import click
 import IPython
 
-from .database import session, nlp, run_query
+from .database import session, nlp, reflect_table, run_query
 from .sentence import Sentence
 from .util import terms, overlaps
 from sqlalchemy.sql.expression import insert
 
 ignimbrite_terms = terms('ignimbrite','welded','tuff')
 age_terms = terms('Ma','Myr','Ga','Gyr','Ka','Kyr','39Ar','40Ar')
-unit_types = terms('Member','Formation','Group','Supergroup')
+unit_types = terms('Member','Formation','Group','Supergroup','Tuff')
 
 @click.group()
 def cli():
     pass
 
 @cli.command()
-def ignimbrites(count, name):
+def ignimbrites():
     """Writes a table indexing sentences mentioning ignimbrites"""
     # Filter by lemmas using the PostgreSQL engine directly
     # This is much quicker than filtering in Python.
+    # In general, all logic that can be pushed to SQL should be...
+
+    run_query('create_mention_table')
+    table = reflect_table('ignimbrite_mention')
+
     res = session.query(nlp).filter(
         nlp.c.lemmas.overlap(ignimbrite_terms))
 
-    count=0
-    sentences = []
-    units = []
     for row in res:
         sentence = Sentence(row)
-
-        print(count)
-        print(sentence.document, sentence.id)
-        print(str(sentence))
-        if overlaps(sentence.lemmas, age_terms):
-            print("Has age")
-        print(" ")
-        # For introspection
-        sentences.append(sentence)
-        count+=1
-
+        # More advanced logic would go here
+        print(sentence)
+        print("")
+        stmt = insert(table).values(
+            docid=sentence.document,
+            sentid=sentence.id)
+        session.execute(stmt)
+    session.commit()
 
 @cli.command()
 def units():
-    """Writes a table containing geologic unit data"""
+    """Writes a table containing geologic unit mentions"""
 
+    # Instead of creating table in raw SQL and then reflecting,
+    # we could define it's schema directly in the SQLAlchemy ORM.
     run_query('create_unit_table')
+    table = reflect_table('ignimbrite_unit')
 
     res = session.query(nlp).filter(
         nlp.c.lemmas.overlap(unit_types))
@@ -58,26 +60,49 @@ def units():
         sentence = Sentence(row)
         # iterate pairwise through units, as each `unit_type`
         # must be preceded by at least one proper name
-        for w1,w2 in zip(sentence[:-1], sentence[1:]):
-            if not w1.is_proper_noun:
+        for word in sentence:
+            if not word.lemma in unit_types:
                 continue
-            if not w2.lemma in unit_types:
-                continue
-            # Build an array back to front
-            __ = [w2,w1]
-            # Expand to catch multiword units
-            prev = w1.previous()
+            __ = [word]
+            prev = word.previous()
+
+            # Upper, middle, lower, etc.
+            position = None
+
+            # Hack to allow continue from within while loop
+            # ...there is probably a cleaner way to do this
+            _should_exit = False
             while prev is not None:
                 if not prev.is_proper_noun:
                     break
-                    # Should institute a check for geologic unit map ids e.g.
-                    # `Tsvl`, `Qal` as these seem to be categorized as proper nouns.
+                # Should institute a check for geologic unit map ids e.g.
+                # `Tsvl`, `Qal` as these seem to be categorized as proper nouns.
+                if prev.lemma in terms('Working','Research', 'Data'):
+                    # Often `Groups` are actually functional groups of people!
+                    __ = None
+                    break
+                if prev.lemma in terms('Upper', 'Middle', 'Lower'):
+                    # Filter out upper, middle lower
+                    position = str(prev)
+                    break
+
+                # Build an array back to front catching multiword units
                 __.append(prev)
                 prev = prev.previous()
+            if __ is None or len(__) < 2:
+                continue
             __.reverse()
 
             name = " ".join(str(i) for i in __)
             print(name)
+            stmt = insert(table).values(
+                name=name,
+                short_name=" ".join(str(i) for i in __[:-1]),
+                position=position,
+                docid=sentence.document,
+                sentid=sentence.id)
+            session.execute(stmt)
+    session.commit()
 
 if __name__ == '__main__':
     cli()

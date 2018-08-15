@@ -6,6 +6,7 @@ Description: A set of classes to represent an NLP352-encoded sentence
 
 class Word(object):
     """
+    Class to represent word within a sentence.
     This class should not be initialized directly as it depends
     on the keyword arguments being set correctly
     """
@@ -26,7 +27,11 @@ class Word(object):
 
     @property
     def is_proper_noun(self):
-        return self.pose in ['NNP','NNPS']
+        if len(self.text) == 0:
+            return False
+        if self.pose in ['NNP','NNPS']:
+            return True
+        return False
 
     @property
     def parent(self):
