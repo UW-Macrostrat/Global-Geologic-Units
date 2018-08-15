@@ -1,7 +1,8 @@
 import yaml
-from sqlalchemy import create_engine, MetaData, Table
+from sqlalchemy import create_engine, MetaData, Table, text
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.engine.url import URL
+from click import secho
 from os.path import join, dirname
 
 __here__ = dirname(__file__)
@@ -28,3 +29,13 @@ session = Session(bind=conn)
 # read all sentences from our NLP example database.
 __tablename = config['app_name']+'_sentences_nlp352'
 nlp = Table(__tablename, meta, autoload=True)
+
+def run_query(sqlfile):
+    if not sqlfile.endswith('.sql'):
+        # We have a query identifier rather than a path
+        # Queries are stored in the `sql` subdirectory
+        sqlfile = join(__here__,'sql',sqlfile+'.sql')
+    with open(sqlfile) as f:
+        sql = f.read()
+    secho(sql,fg='cyan')
+    return session.execute(text(sql))

@@ -3,4 +3,4 @@
 here=${BASH_SOURCE:-$0}
 # The command used to run your application
 cd $(dirname $here)/..
-python -m model_implementation
+python -W ignore -m model_implementation $@
