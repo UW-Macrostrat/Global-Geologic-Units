@@ -7,7 +7,10 @@ Assumes: make setup-local has been run (so that the example database is populate
 import click
 from urllib.request import urlretrieve
 from tempfile import NamedTemporaryFile
+from os.path import join, dirname
+from json import load
 import re
+
 
 from .database import session, nlp, reflect_table, run_query
 from .sentence import Sentence
@@ -15,6 +18,8 @@ from .util import terms, overlaps
 from sqlalchemy.sql.expression import insert
 from geoalchemy2.shape import from_shape
 from shapely.geometry import Point
+
+__here__ = dirname(__file__)
 
 ignimbrite_terms = terms('ignimbrite','welded','tuff')
 age_terms = terms('Ma','Myr','Ga','Gyr','Ka','Kyr','39Ar','40Ar')
@@ -127,6 +132,21 @@ def locations():
             docid=sentence.document,
             sentid=sentence.id)
         session.execute(stmt)
+    session.commit()
+
+@cli.command(name='import-papers')
+def import_papers():
+    with open(join(__here__,'..','input','bibjson')) as f:
+        data = load(f)
+
+    run_query('create_papers_table')
+    table = reflect_table('ignimbrite_paper')
+
+    for i in data:
+        i['docid'] = i.pop('_gddid')
+
+        __ = insert(table).values(**i)
+        session.execute(__)
     session.commit()
 
 @cli.command()
