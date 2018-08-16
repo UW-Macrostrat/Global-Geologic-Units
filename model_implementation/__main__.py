@@ -155,8 +155,8 @@ def units():
                     # Filter out upper, middle lower
                     position = str(prev)
                     break
-                if prev.lemma in periods:
-                    # The unit is preceded with an identified geological period
+                if any(p in prev.lemma for p in periods):
+                    # The unit is preceded with word containing an identified geological period
                     period = str(prev)
                     break
                 if prev.lemma in unit_types:

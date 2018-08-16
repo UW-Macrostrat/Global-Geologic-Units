@@ -38,7 +38,7 @@ class Word(object):
         if len(self.text) == 0:
             return True
         # Throws out `________` words
-        if all(i == '_' for i in st):
+        if all(i == '_' for i in self.text):
             return True
         return False
 
