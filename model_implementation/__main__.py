@@ -50,8 +50,9 @@ def ignimbrites():
 
 @cli.command()
 def locations():
-    res = session.query(nlp).filter(
-        nlp.c.lemmas.overlap(age_terms))
+
+    run_query('create_locations_table')
+    table = reflect_table('ignimbrite_location')
 
     # We want to employ more complex logic here,
     # so we define the query directly in SQL
@@ -62,6 +63,7 @@ def locations():
 
     # Regex to parse possible minute-second pairs to numbers
     expr2 = re.compile("[\d\.]+")
+
 
 
     def dms2dd(degrees, minutes=0, seconds=0):
@@ -119,6 +121,13 @@ def locations():
         print("")
 
         point = from_shape(Point(lon,lat),srid=4326)
+
+        stmt = insert(table).values(
+            geometry=point,
+            docid=sentence.document,
+            sentid=sentence.id)
+        session.execute(stmt)
+    session.commit()
 
 @cli.command()
 def units():
