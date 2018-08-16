@@ -3,5 +3,7 @@ CREATE TABLE ignimbrite_mention (
   docid text,
   sentid integer,
   word text,
-  adjectives text[]
+  wordidx integer,
+  refs text[],
+  ref_poses text[]
 );

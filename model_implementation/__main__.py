@@ -20,7 +20,7 @@ from sqlalchemy.sql.expression import insert
 
 __here__ = dirname(__file__)
 
-ignimbrite_terms = terms('ignimbrite','welded','tuff')
+ignimbrite_terms = terms('ignimbrite','tuff')
 age_terms = terms('Ma','Myr', 'm.y.', 'm.y.r','Ga','Gyr','Ka','Kyr','39Ar','40Ar')
 unit_types = terms('Member','Formation','Group','Supergroup','Tuff','Volcanic')
 
@@ -46,19 +46,20 @@ def mentions():
         print(sentence.document, sentence.id)
         ignimbrite_words = (w for w in sentence if w.lemma in ignimbrite_terms)
         for word in ignimbrite_words:
-            refs = [str(w) for w
+            refs = [w for w
                     in sentence.words_referencing(word)
                     if w.is_adjective or w.is_adverb or w.is_verb]
 
-            print(word, " ".join(refs))
+            print(word, " ".join(str(s) for s in refs))
             print()
-            if len(refs) == 0:
-                refs = None
             stmt = insert(table).values(
                 docid=sentence.document,
                 sentid=sentence.id,
+                wordidx=word.index,
                 word=str(word),
-                adjectives=refs)
+                refs=[str(w) for w in refs],
+                ref_poses=[w.pose for w in refs]
+            )
             session.execute(stmt)
         session.commit()
 
