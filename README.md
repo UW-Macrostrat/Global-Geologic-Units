@@ -5,9 +5,10 @@ A test application built by Daven Quinn to subset data about ignimbrites from th
 ## Executables
 
 All of the functionality of the model can be accessed from a single
-executable.
+`bash` executable.
 
-- `bin/run-model setup` installs required Python packages and install PostGIS extension
+- `bin/run-model setup` installs required Python packages and
+  PostGIS extensions (note: the database must be created separately).
 - `bin/run-model load-test-data` provisions test data in the
   `ignimbrites_sentences_nlp352` table (optionally specifying a filename)
 - `bin/run-model --all` runs the model and dumps generated tables (excluding the
