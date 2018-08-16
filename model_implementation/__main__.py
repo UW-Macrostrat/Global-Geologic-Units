@@ -159,6 +159,9 @@ def units():
                     # The unit is preceded with an identified geological period
                     period = str(prev)
                     break
+                if prev.lemma in unit_types:
+                    # We are stepping on previously identified units that are adjacent
+                    break
                 if prev.lemma in age_terms:
                     break
 

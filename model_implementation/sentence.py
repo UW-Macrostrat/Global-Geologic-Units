@@ -19,6 +19,9 @@ class Word(object):
         else:
             self.dep_parent -= 1
 
+    def lower(self):
+        return self.text.lower()
+
     def __str__(self):
         return self.text
 
@@ -26,8 +29,22 @@ class Word(object):
         return f"{self.text}: {self.pose}, {self.ner}"
 
     @property
-    def is_proper_noun(self):
+    def is_bad(self):
+        """
+        Boolean logic identifying non-word
+        text miscategorized as words.
+        """
+        # Throws out empty strings
         if len(self.text) == 0:
+            return True
+        # Throws out `________` words
+        if all(i == '_' for i in st):
+            return True
+        return False
+
+    @property
+    def is_proper_noun(self):
+        if self.is_bad:
             return False
         if self.pose in ['NNP','NNPS']:
             return True
