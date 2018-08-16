@@ -29,7 +29,7 @@ def cli():
     pass
 
 @cli.command()
-def ignimbrites():
+def mentions():
     """Writes a table indexing sentences mentioning ignimbrites"""
     # Filter by lemmas using the PostgreSQL engine directly
     # This is much quicker than filtering in Python.
@@ -43,14 +43,24 @@ def ignimbrites():
 
     for row in res:
         sentence = Sentence(row)
-        # More advanced logic would go here
-        print(sentence)
-        print("")
-        stmt = insert(table).values(
-            docid=sentence.document,
-            sentid=sentence.id)
-        session.execute(stmt)
-    session.commit()
+        print(sentence.document, sentence.id)
+        ignimbrite_words = (w for w in sentence if w.lemma in ignimbrite_terms)
+        for word in ignimbrite_words:
+            refs = [str(w) for w
+                    in sentence.words_referencing(word)
+                    if w.is_adjective or w.is_adverb or w.is_verb]
+
+            print(word, " ".join(refs))
+            print()
+            if len(refs) == 0:
+                refs = None
+            stmt = insert(table).values(
+                docid=sentence.document,
+                sentid=sentence.id,
+                word=str(word),
+                adjectives=refs)
+            session.execute(stmt)
+        session.commit()
 
 cli.command(name='locations')(locations)
 cli.command(name='named-locations')(named_locations)
@@ -88,7 +98,7 @@ def ages():
                 error=fix_age(error),
                 end_age=fix_age(end_age))
             session.execute(stmt)
-    session.commit()
+        session.commit()
 
 
 @cli.command(name='import-papers')
@@ -182,7 +192,7 @@ def units():
                 docid=sentence.document,
                 sentid=sentence.id)
             session.execute(stmt)
-    session.commit()
+        session.commit()
 
 @cli.command(name='load-macrostrat')
 def load_macrostrat():

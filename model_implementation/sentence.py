@@ -43,8 +43,26 @@ class Word(object):
         return False
 
     @property
+    def is_noun(self):
+        return 'NN' in self.pose
+
+    @property
+    def is_adjective(self):
+        return 'JJ' in self.pose
+
+    @property
+    def is_verb(self):
+        return 'VB' in self.pose
+
+    @property
+    def is_adverb(self):
+        return 'RB' in self.pose
+
+    @property
     def is_proper_noun(self):
         if self.is_bad:
+            return False
+        if not self.is_noun:
             return False
         if self.pose in ['NNP','NNPS']:
             return True
@@ -56,17 +74,29 @@ class Word(object):
     def parent(self):
         if self.dep_parent is None:
             return None
+        # Make sure we don't get an infinite loop
+        if self.dep_parent == self.index:
+            return None
         return self.sentence[self.dep_parent]
 
     @property
     def tree(self):
+        """
+        Get word's chain of references
+        """
+        p = self
+        while p is not None:
+            yield p
+            p = p.parent
+
+    def print_tree(self):
         p = self.parent
         txt = str(self)
         txt += f" ({self.pose} {self.ner})"
         while p is not None:
             txt += " → "+str(p)
             p = p.parent
-        return txt
+        print(txt)
 
     def previous(self):
         ix = self.index-1
@@ -115,6 +145,15 @@ class Sentence(object):
             joined=joined.replace(*s)
         return joined
 
+    def words_referencing(self, word):
+        """
+        Get words referencing another word in the sentence
+        """
+        for w in self:
+            tree = list(w.tree)
+            if word in tree and w != word:
+                yield w
+
     @property
     def document(self):
         return self.__raw__.docid
@@ -125,7 +164,7 @@ class Sentence(object):
 
     def print_breakdown(self):
         for word in self.words:
-            print(word.tree)
+            word.print_tree()
 
     def __iter__(self):
         return (s for s in self.words)
