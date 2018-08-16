@@ -4,6 +4,7 @@ from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.engine.url import URL
 from click import secho
 from os.path import join, dirname
+from sqlalchemy.exc import NoSuchTableError
 
 __here__ = dirname(__file__)
 
@@ -29,7 +30,10 @@ session = Session(bind=conn)
 
 def reflect_table(name):
     "Use SQLAlchemy to reflect the database table schema"
-    return Table(name, meta, autoload=True)
+    try:
+        return Table(name, meta, autoload=True)
+    except NoSuchTableError:
+        return None
 
 # read all sentences from our NLP example database.
 __tablename = config['app_name']+'_sentences_nlp352'

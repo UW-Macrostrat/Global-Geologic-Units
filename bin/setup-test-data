@@ -34,6 +34,9 @@ function sql {
                  -p $postgres__port $postgres__database
 }
 
+# Install relevant python packages
+pip install -r $pwd/requirements.txt
+
 # Create the database - if it exists an error will be thrown which can be ignored
 createdb $postgres__database -h $postgres__host -U $postgres__username -p $postgres__port
 # Setup PostGIS extension

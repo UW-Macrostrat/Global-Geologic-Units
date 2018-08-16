@@ -3,4 +3,42 @@
 here=${BASH_SOURCE:-$0}
 # The command used to run your application
 cd $(dirname $here)/..
-python -W ignore -m model_implementation $@
+
+function __run {
+  python -W ignore -m model_implementation $@
+}
+
+
+
+if [ $1 = "--all" ]; then
+  # Test data must be loaded prior to running this
+  echo "Running entire model"
+  $0 setup
+  $0 mentions
+  $0 ages
+  $0 units
+  $0 locations
+  $0 named-locations
+  $0 dump-database
+  exit 0
+fi
+
+if [ $1 = "setup" ]; then
+  # Hijack setup to install python modules first
+  echo "Setting up model"
+  pip install -r requirements.txt
+  __run $@
+  __run load-macrostrat
+  exit 0
+fi
+
+if [ $1 = "dump-database" ]; then
+  # Test data must be loaded prior to running this
+  mkdir -p output
+  out=output/ignimbrites.pg-dump
+  echo "Dumping database to '$out'"
+  __run dump-database > $out
+  exit 0
+fi
+
+__run $@

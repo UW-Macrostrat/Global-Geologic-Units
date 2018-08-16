@@ -7,12 +7,15 @@ Assumes: make setup-local has been run (so that the example database is populate
 import click
 from urllib.request import urlretrieve
 from tempfile import NamedTemporaryFile
-from os.path import join, dirname
+from sqlalchemy.exc import ProgrammingError
+from os import makedirs
+from os.path import join, dirname, abspath, exists
 from json import load
+from subprocess import run
 import re
 
 
-from .database import session, nlp, reflect_table, run_query
+from .database import session, nlp, reflect_table, run_query, credentials
 from .sentence import Sentence
 from .location import locations, named_locations
 from .util import terms, overlaps
@@ -27,6 +30,30 @@ unit_types = terms('Member','Formation','Group','Supergroup','Tuff','Volcanic')
 @click.group()
 def cli():
     pass
+
+@cli.command()
+def setup():
+    """Set up required database extensions and tables"""
+    try:
+        run_query('setup_database')
+    except ProgrammingError:
+        click.echo("Extension already exists")
+
+@cli.command(name='load-test-data')
+@click.argument('filename', required=False, type=click.File())
+def load_test_data(filename=None):
+    """Set up required database extensions and tables"""
+    if filename is None:
+        filename = abspath(join(__here__, '..', 'input', 'sentences_nlp352'))
+    run_query('load_test_data', filename=filename)
+
+@cli.command(name='dump-database')
+def dump_databased():
+    """Set up required database extensions and tables"""
+    pg = credentials['postgres']
+    cmd = ('pg_dump','-Fc','--exclude-table=ignimbrites_sentences_nlp352',
+           '-h', pg['host'], '-p', str(pg['port']), '-U', pg['username'], '-d', pg['database'])
+    run(cmd)
 
 @cli.command()
 def mentions():
