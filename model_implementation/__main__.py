@@ -22,7 +22,7 @@ from shapely.geometry import Point
 __here__ = dirname(__file__)
 
 ignimbrite_terms = terms('ignimbrite','welded','tuff')
-age_terms = terms('Ma','Myr','Ga','Gyr','Ka','Kyr','39Ar','40Ar')
+age_terms = terms('Ma','Myr', 'm.y.', 'm.y.r','Ga','Gyr','Ka','Kyr','39Ar','40Ar')
 unit_types = terms('Member','Formation','Group','Supergroup','Tuff','Volcanic')
 
 @click.group()
@@ -101,9 +101,9 @@ def locations():
             if cardinal_direction in ['S','W']:
                 deg *= -1
             if cardinal_direction in ('N','S'):
-                lons.append(deg)
-            else:
                 lats.append(deg)
+            else:
+                lons.append(deg)
         if not len(lons)*len(lats):
             continue
         # Get rid of sentences where there is too
@@ -134,8 +134,47 @@ def locations():
         session.execute(stmt)
     session.commit()
 
+@cli.command(name='ages')
+def ages():
+    run_query('create_ages_table')
+    table = reflect_table('ignimbrite_age')
+
+    res = (session.query(nlp)
+        .filter(nlp.c.lemmas.overlap(age_terms))
+        .filter(nlp.c.lemmas.overlap(ignimbrite_terms))
+    )
+
+    age_range = re.compile("(\d+(?:\.\d+)?)(?: ± (\d+(?:\.\d+)?))?(?: ?(-*|to|and) ?(\d+(?:\.\d+)?))? ?([Mk]a)")
+    for row in res:
+        sentence = Sentence(row)
+        __ = age_range.findall(str(sentence))
+        for match in __:
+            (age, error, sep, end_age, unit) = match
+            def fix_age(val):
+                if val == '':
+                    val = None
+                if val is None:
+                    return val
+                val = float(val)
+                if unit == 'ka':
+                    val /= 1000
+                return val
+
+            stmt = insert(table).values(
+                docid=sentence.document,
+                sentid=sentence.id,
+                age=fix_age(age),
+                error=fix_age(error),
+                end_age=fix_age(end_age))
+            session.execute(stmt)
+    session.commit()
+
+
 @cli.command(name='import-papers')
 def import_papers():
+    """
+    Import papers from bibjson file
+    """
     with open(join(__here__,'..','input','bibjson')) as f:
         data = load(f)
 
