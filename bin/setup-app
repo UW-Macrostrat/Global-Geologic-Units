@@ -36,6 +36,10 @@ function sql {
 
 # Create the database - if it exists an error will be thrown which can be ignored
 createdb $postgres__database -h $postgres__host -U $postgres__username -p $postgres__port
+# Setup PostGIS extension
+sql <<-EOF
+CREATE EXTENSION postgis;
+EOF
 
 # DROP TABLES to rebuild
 sql <<-EOF

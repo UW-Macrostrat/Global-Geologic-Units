@@ -5,18 +5,20 @@ Description: Example app utilizing the GeoDeepDive infrastructure and products
 Assumes: make setup-local has been run (so that the example database is populated)
 """
 import click
-import IPython
 from urllib.request import urlretrieve
 from tempfile import NamedTemporaryFile
+import re
 
 from .database import session, nlp, reflect_table, run_query
 from .sentence import Sentence
 from .util import terms, overlaps
 from sqlalchemy.sql.expression import insert
+from geoalchemy2.shape import from_shape
+from shapely.geometry import Point
 
 ignimbrite_terms = terms('ignimbrite','welded','tuff')
 age_terms = terms('Ma','Myr','Ga','Gyr','Ka','Kyr','39Ar','40Ar')
-unit_types = terms('Member','Formation','Group','Supergroup','Tuff')
+unit_types = terms('Member','Formation','Group','Supergroup','Tuff','Volcanic')
 
 @click.group()
 def cli():
@@ -45,6 +47,78 @@ def ignimbrites():
             sentid=sentence.id)
         session.execute(stmt)
     session.commit()
+
+@cli.command()
+def locations():
+    res = session.query(nlp).filter(
+        nlp.c.lemmas.overlap(age_terms))
+
+    # We want to employ more complex logic here,
+    # so we define the query directly in SQL
+    res = run_query('get_location_sentences')
+
+    # Regex to parse common DMS and DD location coordinates
+    expr = re.compile(" ((\d+(?:\.\d+)?)°([\d '`\"]+)([NSEW]))")
+
+    # Regex to parse possible minute-second pairs to numbers
+    expr2 = re.compile("[\d\.]+")
+
+
+    def dms2dd(degrees, minutes=0, seconds=0):
+        return degrees + minutes/60 + seconds/3600
+
+    for row in res:
+        lats = []
+        lons = []
+        sentence = Sentence(row)
+        text = str(sentence)
+        pos = 0
+        matches = expr.findall(text)
+        if len(matches) < 2:
+            # We need at least two to have a hope of
+            # finding a lat-lon pair
+            continue
+        for match, deg, minute_second, cardinal_direction in matches:
+            deg = float(deg)
+            if not minute_second.isspace():
+                ms = expr2.findall(minute_second)
+                def __get_value(ix):
+                    try:
+                        return float(ms[ix])
+                    except IndexError:
+                        return 0
+
+                deg = dms2dd(deg,
+                    minutes=__get_value(0),
+                    seconds=__get_value(1))
+            if cardinal_direction in ['S','W']:
+                deg *= -1
+            if cardinal_direction in ('N','S'):
+                lons.append(deg)
+            else:
+                lats.append(deg)
+        if not len(lons)*len(lats):
+            continue
+        # Get rid of sentences where there is too
+        # wide a spread of lon/lat values (probably
+        # signifying some sort of map labels).
+        if max(lons)-min(lons) > 5:
+            continue
+        if max(lats)-min(lats) > 5:
+            continue
+
+        # We average for now
+        # ...more interesting would be to create
+        # and record bounding boxes
+        mean = lambda x: sum(x)/len(x)
+        lon = mean(lons)
+        lat = mean(lats)
+
+        print(sentence)
+        print(lon, lat)
+        print("")
+
+        point = from_shape(Point(lon,lat),srid=4326)
 
 @cli.command()
 def units():

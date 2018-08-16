@@ -91,7 +91,9 @@ class Sentence(object):
                 ("-LRB- ","("),
                 (" -RRB-",")"),
                 ("-LSB- ","["),
-                (" -RSB-","]")]
+                (" -RSB-","]"),
+                ("◦","°"),
+                (" °", "°")]
         for s in subs:
             joined=joined.replace(*s)
         return joined

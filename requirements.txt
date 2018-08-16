@@ -1,4 +1,5 @@
 pyyaml>=3.11
 sqlalchemy>=1.2
 click>=5.0
-IPython>=6.5
+geoalchemy2>=0.4.2
+shapely>=1.6
