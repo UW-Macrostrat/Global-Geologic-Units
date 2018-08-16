@@ -14,6 +14,7 @@ import re
 
 from .database import session, nlp, reflect_table, run_query
 from .sentence import Sentence
+from .location import named_locations
 from .util import terms, overlaps
 from sqlalchemy.sql.expression import insert
 from geoalchemy2.shape import from_shape
@@ -53,9 +54,12 @@ def ignimbrites():
         session.execute(stmt)
     session.commit()
 
+cli.command(name='named-locations')(named_locations)
+
+
 @cli.command()
 def locations():
-
+    "Get locations in degrees"
     run_query('create_locations_table')
     table = reflect_table('ignimbrite_location')
 
