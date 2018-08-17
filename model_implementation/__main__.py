@@ -14,9 +14,9 @@ from json import load
 from subprocess import run
 import re
 
+from GDDTools import Sentence
 
 from .database import session, nlp, reflect_table, run_query, credentials
-from .sentence import Sentence
 from .location import locations, named_locations
 from .util import terms, overlaps
 from sqlalchemy.sql.expression import insert

@@ -10,7 +10,7 @@ function __run {
 
 
 
-if [ $1 = "--all" ]; then
+if [[ $1 = "--all" ]]; then
   # Test data must be loaded prior to running this
   echo "Running entire model"
   $0 setup
@@ -23,7 +23,7 @@ if [ $1 = "--all" ]; then
   exit 0
 fi
 
-if [ $1 = "setup" ]; then
+if [[ $1 = "setup" ]]; then
   # Hijack setup to install python modules first
   echo "Setting up model"
   pip install -r requirements.txt
@@ -32,7 +32,7 @@ if [ $1 = "setup" ]; then
   exit 0
 fi
 
-if [ $1 = "dump-database" ]; then
+if [[ $1 = "dump-database" ]]; then
   # Test data must be loaded prior to running this
   mkdir -p output
   out=output/ignimbrites.pg-dump

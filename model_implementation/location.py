@@ -5,7 +5,8 @@ from geoalchemy2.shape import from_shape
 from shapely.geometry import Point
 from sqlalchemy.sql.expression import insert
 
-from .sentence import Sentence
+from GDDTools import Sentence
+
 from .database import session, nlp, reflect_table, run_query
 
 def locations():

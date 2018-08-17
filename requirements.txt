@@ -3,3 +3,4 @@ sqlalchemy>=1.2
 click>=5.0
 geoalchemy2>=0.4.2
 shapely>=1.6
+git+git://github.com/davenquinn/GeoDeepDive-tools.git@master
