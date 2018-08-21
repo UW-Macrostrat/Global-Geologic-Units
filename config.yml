@@ -1,5 +1,5 @@
 # The name of the application (no spaces)
-app_name: ignimbrites
+app_name: global_geologic_units
 
 # A brief description of the app.
 description : Find all the ignimbrites.
@@ -14,11 +14,3 @@ email: daven.quinn@wisc.edu
 # Current options are Python, R, and Go
 language: Python
 
-# You can choose to specify a list of dictionaries, a list of terms, or both.
-# If both dictionaries and terms are provided, all terms in the dictionary PLUS
-# all listed terms will be used
-#
-# ???? What is the difference between a dictionary and term???
-dictionaries: [units]
-
-terms: [ignimbrite, ash, tuff, welded, phonolite, ashflow, volcanic ash]
