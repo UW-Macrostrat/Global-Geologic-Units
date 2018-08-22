@@ -16,7 +16,7 @@ import re
 from GDDTools import Sentence
 
 from .database import session, nlp, reflect_table, run_query, credentials
-from .location import locations, named_locations
+from .location import locations
 from .util import terms, overlaps
 from sqlalchemy.sql.expression import insert
 
