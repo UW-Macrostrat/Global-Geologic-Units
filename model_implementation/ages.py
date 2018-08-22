@@ -7,6 +7,16 @@ from .util import terms, overlaps
 
 age_terms = terms('Ma','Myr', 'm.y.', 'm.y.r','Ga','Gyr','Ka','Kyr','39Ar','40Ar')
 
+def fix_age(val, unit):
+    if val == '':
+        val = None
+    if val is None:
+        return val
+    val = float(val)
+    if unit == 'ka':
+        val /= 1000
+    return val
+
 def ages():
     run_query('create_ages_table')
     table = reflect_table('global_geology_age')
@@ -20,22 +30,13 @@ def ages():
         __ = age_range.findall(str(sentence))
         for match in __:
             (age, error, sep, end_age, unit) = match
-            def fix_age(val):
-                if val == '':
-                    val = None
-                if val is None:
-                    return val
-                val = float(val)
-                if unit == 'ka':
-                    val /= 1000
-                return val
 
             stmt = insert(table).values(
                 docid=sentence.document,
                 sentid=sentence.id,
-                age=fix_age(age),
-                error=fix_age(error),
-                end_age=fix_age(end_age))
+                age=fix_age(age, unit),
+                error=fix_age(error, unit),
+                end_age=fix_age(end_age, unit))
             session.execute(stmt)
         session.commit()
 
