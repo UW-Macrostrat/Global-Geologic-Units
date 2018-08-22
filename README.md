@@ -8,7 +8,7 @@ from information contained in the GeoDeepDive database.
 
 You need a recent Python 3 installation and PostgreSQL to run this model locally.
 
-Copy `config.yml.template` to `config.yml` and change values to match
+Copy `credentials.yml.template` to `credentials.yml` and change values to match
 your local PostgreSQL configuration.
 
 ## Executables

@@ -1,8 +1,8 @@
 # The name of the application (no spaces)
-app_name: global_geologic_units
+app_name: global_geology
 
 # A brief description of the app.
-description : Find all the ignimbrites.
+description : Link the spatiotemporal extent of geologic units, globally.
 
 # Your first and last name
 user: Daven Quinn

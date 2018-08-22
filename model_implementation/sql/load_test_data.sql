@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS ignimbrites_sentences_nlp352;
-CREATE TABLE ignimbrites_sentences_nlp352 (
+DROP TABLE IF EXISTS global_geology_sentences_nlp352;
+CREATE TABLE global_geology_sentences_nlp352 (
   docid text,
   sentid integer,
   wordidx integer[],
@@ -10,4 +10,4 @@ CREATE TABLE ignimbrites_sentences_nlp352 (
   dep_paths text[],
   dep_parents integer[]
 );
-COPY ignimbrites_sentences_nlp352 FROM :filename;
+COPY global_geology_sentences_nlp352 FROM :filename;

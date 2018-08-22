@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS ignimbrite_unit;
-CREATE TABLE ignimbrite_unit (
+DROP TABLE IF EXISTS global_geology_unit;
+CREATE TABLE global_geology_unit (
   docid text,
   sentid integer,
   name text,

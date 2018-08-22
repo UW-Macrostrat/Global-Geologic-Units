@@ -51,7 +51,7 @@ def load_test_data(filename=None):
 def dump_databased():
     """Set up required database extensions and tables"""
     pg = credentials['postgres']
-    cmd = ('pg_dump','-Fc','--exclude-table=ignimbrites_sentences_nlp352',
+    cmd = ('pg_dump','-Fc','--exclude-table=global_geology_sentences_nlp352',
            '-h', pg['host'], '-p', str(pg['port']), '-U', pg['username'], '-d', pg['database'])
     run(cmd)
 
@@ -63,7 +63,7 @@ def mentions():
     # In general, all logic that can be pushed to SQL should be...
 
     run_query('create_mention_table')
-    table = reflect_table('ignimbrite_mention')
+    table = reflect_table('global_geology_mention')
 
     res = session.query(nlp).filter(
         nlp.c.lemmas.overlap(ignimbrite_terms))
@@ -96,7 +96,7 @@ cli.command(name='named-locations')(named_locations)
 @cli.command(name='ages')
 def ages():
     run_query('create_ages_table')
-    table = reflect_table('ignimbrite_age')
+    table = reflect_table('global_geology_age')
 
     res = (session.query(nlp)
         .filter(nlp.c.lemmas.overlap(age_terms))
@@ -138,7 +138,7 @@ def import_papers():
         data = load(f)
 
     run_query('create_papers_table')
-    table = reflect_table('ignimbrite_paper')
+    table = reflect_table('global_geology_paper')
 
     for i in data:
         i['docid'] = i.pop('_gddid')
@@ -154,7 +154,7 @@ def units():
     # Instead of creating table in raw SQL and then reflecting,
     # we could define it's schema directly in the SQLAlchemy ORM.
     run_query('create_unit_table')
-    table = reflect_table('ignimbrite_unit')
+    table = reflect_table('global_geology_unit')
 
     res = session.query(nlp).filter(
         nlp.c.lemmas.overlap(unit_types))
