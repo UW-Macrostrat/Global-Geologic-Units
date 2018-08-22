@@ -8,6 +8,9 @@ from information contained in the GeoDeepDive database.
 
 You need a recent Python 3 installation and PostgreSQL to run this model locally.
 
+Create a PostgreSQL database to hold the model input and output data.
+A typical database creation command would be `psql -c "CREATE DATABASE global_geology_test"`
+
 Copy `credentials.yml.template` to `credentials.yml` and change values to match
 your local PostgreSQL configuration.
 
@@ -15,6 +18,8 @@ your local PostgreSQL configuration.
 should be downloaded from the GeoDeepDive server and extracted into the
 `input` directory of this repository. Then run
 `bin/run-model load-test-data` to load this data into the database.
+
+
 
 ## Executables
 
