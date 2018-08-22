@@ -1,12 +1,6 @@
 all: local_setup
 
-.PHONY: install test_data training_data local_setup
-
-local_setup:
-	./bin/setup-app
-
-install:
-	pip install -r example_app/requirements.txt
+.PHONY: training_data
 
 training_data:
 	# Test data for volcanic ash provided by Ian Ross
