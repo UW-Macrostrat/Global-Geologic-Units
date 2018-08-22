@@ -1,0 +1,46 @@
+# Julia's development version of finding stratigraphic entities for global-geologic-units app
+# 
+# differences from strom app:
+# + lots more terms (igneous, metamorphic, etc.)
+# + a few new types of entities:
+#		= Large Igneous Province (is 'Large' a stop word?)
+#		= ** [rock type][NNP][NNP?] (of) [NNP][NNP] (might be rare) e.g. Quartz Monzonite of Ruby Lake
+#		= ends in 'Complex'
+# 		= anything else?
+#
+# input flag_words lists:
+#	= last word in every Macrostrat strat_name
+# 	= every Macrostrat lithology
+# 	= extra ones from Brenhin
+#	= ?
+#
+# Input will be a file with each entity separated by a newline:
+#		Limestone
+#		Formation
+#		etc.
+#
+# two(+?) methods:
+#	= similar to strom (will find 'Green River Formation' or 'Big Red Schist')
+#		+ find flag_words, read backwards,
+#		+ keep same strom rules
+#			- (will not find Quartz Monzonite, I don't think -- double flag_word rule)
+#	= different to account for Brenhin's example: 'Quartz Monzonite of Ruby Lake'
+#		+ is this format always/almost always the same?
+#		+ algorithm:
+#			- find flag
+#			- read backwards through proper nouns before flag
+#			- relax rules but keep:
+#				1. capitalized first letter
+#				2. not a number
+#				3. not a stop word
+#				4. any others?
+#			- read forwards from flag
+#			- if it's 'of':
+#				look after 'of' -- proper noun(s) = keep
+#			- save "...[NNP][NNP] flag 'of' [NNP][NNP]..."
+#
+# =============================
+
+
+# import blah blah
+
