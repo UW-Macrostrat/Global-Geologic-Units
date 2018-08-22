@@ -35,7 +35,7 @@ fi
 if [[ $1 = "dump-database" ]]; then
   # Test data must be loaded prior to running this
   mkdir -p output
-  out=output/ignimbrites.pg-dump
+  out=output/database.pg-dump
   echo "Dumping database to '$out'"
   __run dump-database > $out
   exit 0
