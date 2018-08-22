@@ -8,10 +8,8 @@ SELECT
 FROM global_geology_sentences_nlp352
 )
 SELECT * FROM a
-WHERE text ~ '(°|◦)'
-  -- We don't want temperatures
-  AND NOT text ~ '(°|◦) (C|F)'
+WHERE
   -- We don't want structural data
-  AND NOT lemmas && ARRAY['dip','strike','orientation', 'striking',
+  NOT lemmas && ARRAY['dip','strike','orientation', 'striking',
                            'angle', 'trend', 'plunge', 'inclination', 'direction']
 
