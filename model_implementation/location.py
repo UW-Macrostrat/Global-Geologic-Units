@@ -23,7 +23,7 @@ def locations():
     res = run_query('get_location_sentences')
 
     # Regex to parse common DMS and DD location coordinates
-    expr = re.compile("[\s]((\d+(?:\.\d+)?)°([\d\s′'`\"]*)([NSEW]))\W")
+    expr = re.compile("[\s]((\d+(?:\.\d+)?)[°◦]([\d\s′'`\"]*)([NSEW]))\W")
 
     # Regex to parse possible minute-second pairs to numbers
     expr2 = re.compile("[\d\.]+")
