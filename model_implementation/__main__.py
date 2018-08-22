@@ -1,8 +1,7 @@
 """
 File: __main__.py
 Description: Example app utilizing the GeoDeepDive infrastructure and products
-    to find ignimbrite mentions in the literature.
-Assumes: make setup-local has been run (so that the example database is populated)
+    to find geologic unit mentions in the literature.
 """
 import click
 from urllib.request import urlretrieve
@@ -23,7 +22,6 @@ from sqlalchemy.sql.expression import insert
 
 __here__ = dirname(__file__)
 
-ignimbrite_terms = terms('ignimbrite','tuff')
 age_terms = terms('Ma','Myr', 'm.y.', 'm.y.r','Ga','Gyr','Ka','Kyr','39Ar','40Ar')
 unit_types = terms('Member','Formation','Group','Supergroup','Tuff','Volcanic')
 
@@ -55,43 +53,7 @@ def dump_databased():
            '-h', pg['host'], '-p', str(pg['port']), '-U', pg['username'], '-d', pg['database'])
     run(cmd)
 
-@cli.command()
-def mentions():
-    """Writes a table indexing sentences mentioning ignimbrites"""
-    # Filter by lemmas using the PostgreSQL engine directly
-    # This is much quicker than filtering in Python.
-    # In general, all logic that can be pushed to SQL should be...
-
-    run_query('create_mention_table')
-    table = reflect_table('global_geology_mention')
-
-    res = session.query(nlp).filter(
-        nlp.c.lemmas.overlap(ignimbrite_terms))
-
-    for row in res:
-        sentence = Sentence(row)
-        print(sentence.document, sentence.id)
-        ignimbrite_words = (w for w in sentence if w.lemma in ignimbrite_terms)
-        for word in ignimbrite_words:
-            refs = [w for w
-                    in sentence.words_referencing(word)
-                    if w.is_adjective or w.is_adverb or w.is_verb]
-
-            print(word, " ".join(str(s) for s in refs))
-            print()
-            stmt = insert(table).values(
-                docid=sentence.document,
-                sentid=sentence.id,
-                wordidx=word.index,
-                word=str(word),
-                refs=[str(w) for w in refs],
-                ref_poses=[w.pose for w in refs]
-            )
-            session.execute(stmt)
-        session.commit()
-
 cli.command(name='locations')(locations)
-cli.command(name='named-locations')(named_locations)
 
 @cli.command(name='ages')
 def ages():
@@ -100,7 +62,6 @@ def ages():
 
     res = (session.query(nlp)
         .filter(nlp.c.lemmas.overlap(age_terms))
-        .filter(nlp.c.lemmas.overlap(ignimbrite_terms))
     )
 
     age_range = re.compile("(\d+(?:\.\d+)?)(?: ± (\d+(?:\.\d+)?))?(?: ?(-*|to|and) ?(\d+(?:\.\d+)?))? ?([Mk]a)")
