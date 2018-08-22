@@ -80,10 +80,18 @@ def import_papers():
 
 @cli.command(name='load-macrostrat')
 def load_macrostrat():
-    "Load macrostrat data into database"
+    "Load macrostrat periods into database"
     with NamedTemporaryFile(delete=True) as f:
         urlretrieve("https://macrostrat.org/api/defs/intervals?all&format=csv", f.name)
         run_query("create_periods_table", filename=f.name)
-
+    "Load macrostrat strat names into database"
+    with NamedTemporaryFile(delete=True) as f:
+        urlretrieve("https://macrostrat.org/api/defs/strat_names?ref_id=1&format=csv", f.name)
+        run_query("create_strat_table", filename=f.name)
+    "Load macrostrat lithologies into database"
+    with NamedTemporaryFile(delete=True) as f:
+        urlretrieve("https://dev.macrostrat.org/api/defs/lithologies?all&format=csv", f.name)
+        run_query("create_lith_table", filename=f.name)
+        
 if __name__ == '__main__':
     cli()

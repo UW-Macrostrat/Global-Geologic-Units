@@ -41,6 +41,17 @@
 #
 # =============================
 
+# import
+from sqlalchemy.sql.expression import insert
+from GDDTools import Sentence
 
-# import blah blah
+# these are from user-defined methods
+from .database import session, nlp, reflect_table, run_query
+from .util import terms
+from .ages import age_terms
+
+# make table to put entities in
+# right now it is global_geologic_units
+# think about columns -- just finding full phrases for now
+# docid, sentid, strat_phrase, wordid_start, wordid_end
 
