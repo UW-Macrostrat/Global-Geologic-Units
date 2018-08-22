@@ -12,7 +12,7 @@ from .database import session, nlp, reflect_table, run_query
 def locations():
     "Get locations in degrees"
     run_query('create_locations_table')
-    table = reflect_table('ignimbrite_location')
+    table = reflect_table('global_geology_location')
 
     # We want to employ more complex logic here,
     # so we define the query directly in SQL
@@ -89,7 +89,7 @@ def locations():
 
 def named_locations():
     run_query('create_named_locations_table')
-    table = reflect_table('ignimbrite_named_location')
+    table = reflect_table('global_geology_named_location')
 
     res = session.query(nlp).filter(
         nlp.c.ners.overlap(['LOCATION']))
