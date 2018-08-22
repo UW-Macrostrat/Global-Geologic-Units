@@ -11,8 +11,9 @@ You need a recent Python 3 installation and PostgreSQL to run this model locally
 Copy `credentials.yml.template` to `credentials.yml` and change values to match
 your local PostgreSQL configuration.
 
-To download test data from the GeoDeepDive server, run `make
-training_data` in the root directory of the project. Then run
+[Test data subset from the GeoDeepDive corpus](http://geodeepdive.org/dev_subsets/interval_location_signals_partial_sample.zip)
+should be downloaded from the GeoDeepDive server and extracted into the
+`input` directory of this repository. Then run
 `bin/run-model load-test-data` to load this data into the database.
 
 ## Executables
