@@ -46,12 +46,19 @@ def load_test_data(filename=None):
     run_query('load_test_data', filename=filename)
 
 @cli.command(name='dump-database')
-def dump_databased():
+def dump_database():
     """Set up required database extensions and tables"""
     pg = credentials['postgres']
     cmd = ('pg_dump','-Fc','--exclude-table=global_geology_sentences_nlp352',
            '-h', pg['host'], '-p', str(pg['port']), '-U', pg['username'], '-d', pg['database'])
     run(cmd)
+
+@cli.command(name='join-datasets')
+def join_datasets():
+    """
+    Join unit names and coordinates tables
+    """
+    run_query('create_join_view')
 
 @cli.command(name='import-papers')
 def import_papers():
