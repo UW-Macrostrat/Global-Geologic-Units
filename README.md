@@ -1,6 +1,13 @@
-# GeoDeepDive Ignimbrite Application
+# GeoDeepDive Global Units Application
 
 A test application built by Daven Quinn to subset data about ignimbrites from the GeoDeepDive database.
+
+## Installation
+
+You need a recent Python 3 installation and PostgreSQL to run this model locally.
+
+Copy `config.yml.template` to `config.yml` and change values to match
+your local PostgreSQL configuration.
 
 ## Executables
 
