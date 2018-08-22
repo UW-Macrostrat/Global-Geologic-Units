@@ -83,7 +83,8 @@ def locations():
         stmt = insert(table).values(
             geometry=point,
             docid=sentence.document,
-            sentid=sentence.id)
+            sentid=sentence.id,
+            sentence=str(sentence))
         session.execute(stmt)
     session.commit()
 
