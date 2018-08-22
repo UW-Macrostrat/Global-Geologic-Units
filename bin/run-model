@@ -5,7 +5,7 @@ here=${BASH_SOURCE:-$0}
 cd $(dirname $here)/..
 
 function __run {
-  python -W ignore -m model_implementation $@
+  python3 -W ignore -m model_implementation $@
 }
 
 if [[ $1 = "--all" ]]; then
@@ -26,7 +26,7 @@ fi
 if [[ $1 = "setup" ]]; then
   # Hijack setup to install python modules first
   echo "Setting up model"
-  pip install -r requirements.txt
+  pip3 install -r requirements.txt
   __run $@
   __run load-macrostrat
   exit 0
