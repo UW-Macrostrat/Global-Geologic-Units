@@ -8,10 +8,10 @@ function __run {
   python -W ignore -m model_implementation $@
 }
 
-
-
 if [[ $1 = "--all" ]]; then
   # Test data must be loaded prior to running this
+  # This command is principally for running the entire model
+  # on the GeoDeepDive cluster.
   echo "Running entire model"
   $0 setup
   $0 mentions
