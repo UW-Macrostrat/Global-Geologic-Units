@@ -1,6 +1,8 @@
-# GeoDeepDive Global Units Application
+# GeoDeepDive Global Geologic Units Application
 
-A test application built by Daven Quinn to subset data about ignimbrites from the GeoDeepDive database.
+A test application built by Daven Quinn and others
+to subset data about the spatiotemporal extent of geologic units
+from information contained in the GeoDeepDive database.
 
 ## Installation
 
