@@ -1,0 +1,16 @@
+# The name of the application (no spaces)
+app_name: global_geologic_units
+
+# A brief description of the app.
+description : Find all the ignimbrites.
+
+# Your first and last name
+user: Daven Quinn
+
+# Your email
+email: daven.quinn@wisc.edu
+
+# The primary language the application is written in - will be used for installing dependencies
+# Current options are Python, R, and Go
+language: Python
+
