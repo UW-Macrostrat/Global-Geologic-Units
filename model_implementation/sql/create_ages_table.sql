@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS ignimbrite_age;
-CREATE TABLE ignimbrite_age (
+DROP TABLE IF EXISTS global_geology_age;
+CREATE TABLE global_geology_age (
   docid text,
   sentid integer,
   age numeric,

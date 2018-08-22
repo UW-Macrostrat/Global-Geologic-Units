@@ -5,7 +5,7 @@ WITH a AS (
 SELECT
 	*,
 	array_to_string(words,' ') AS text
-FROM ignimbrites_sentences_nlp352
+FROM global_geology_sentences_nlp352
 )
 SELECT * FROM a
 WHERE text ~ '(°|◦)'

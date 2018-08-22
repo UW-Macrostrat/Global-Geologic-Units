@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS ignimbrite_paper;
-CREATE TABLE ignimbrite_paper (
+DROP TABLE IF EXISTS global_geology_paper;
+CREATE TABLE global_geology_paper (
   docid text PRIMARY KEY,
   publisher text,
   title text,
