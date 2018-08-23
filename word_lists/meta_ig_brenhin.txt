@@ -1,0 +1,13 @@
+Platform
+Massif
+Batholith
+Pluton
+Stock
+Laccolith
+Diatreme
+Province
+Swarm
+Dike
+Ophiolite
+Terrane
+Orogen
