@@ -18,6 +18,7 @@ from .location import locations
 from .units import units
 from .ages import ages
 from .util import terms, overlaps
+from .ext_strat_phrases import ext_strat_phrases
 
 __here__ = dirname(__file__)
 
@@ -28,6 +29,7 @@ def cli():
 cli.command(name='locations')(locations)
 cli.command(name='units')(units)
 cli.command(name='ages')(ages)
+cli.command(name='strat_phrases')(ext_strat_phrases)
 
 @cli.command(name='setup')
 def setup():

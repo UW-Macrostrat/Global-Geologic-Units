@@ -17,6 +17,7 @@ if [[ $1 = "--all" ]]; then
   $0 mentions
   $0 ages
   $0 units
+  $0 ext_strat_phrases
   $0 locations
   $0 named-locations
   $0 dump-database

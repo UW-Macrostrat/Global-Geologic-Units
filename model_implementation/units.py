@@ -15,6 +15,7 @@ def units():
     run_query('create_unit_table')
     table = reflect_table('global_geology_unit')
 
+    # query the nlp output (sentences table, see 'database.py'). look at the lemmas column and get all the rows that have a unit_type (see above list definition) in lemmas.
     res = session.query(nlp).filter(
         nlp.c.lemmas.overlap(unit_types))
 
