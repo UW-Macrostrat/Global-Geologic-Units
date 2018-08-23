@@ -3,7 +3,7 @@ CREATE TABLE macrostrat_lith (
   lith_id numeric PRIMARY KEY,
   name text,
   type text,
-  group text,
+  gp text,
   class text,
   color text,
   fill numeric,
