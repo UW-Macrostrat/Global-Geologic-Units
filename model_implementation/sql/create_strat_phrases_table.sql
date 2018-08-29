@@ -5,6 +5,7 @@ CREATE TABLE strat_phrases (
   strat_flag text,
   strat_name_full text,
   strat_mention text,
+  sentence text,
   flag_id text,
   mention_idx text
 );

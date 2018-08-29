@@ -42,9 +42,11 @@
 # =============================
 
 # import
+import re
 from sqlalchemy.sql.expression import insert
 from GDDTools import Sentence
-#from stop_words import get_stop_words
+import string
+from stop_words import get_stop_words
 
 # these are from user-defined methods
 from .database import session, nlp, reflect_table, run_query
@@ -95,7 +97,7 @@ def ext_strat_phrases():
 	#for i in manual_flags:
 		#exec(i) # doesn't work, is risky
 	abbrevs = ["Gp.", "Fm.", "Mbr.", "SGp.", "Gp", "Fm", "Mbr", "SGp"]
-	metaig_words = ["Platform", "Massif", "Batholith", "Pluton", "Stock", "Laccolith", "Diatreme", "Province", "Swarm", "Dike", "Ophiolite", "Terrane", "Orogen"]
+	metaig_words = ["Platform", "Massif", "Batholith", "Pluton", "Stock", "Laccolith", "Diatreme", "Province", "Swarm", "Dike", "Ophiolite", "Terrane", "Orogen", "Belt"]
 # Now there are two other lists of flag words: abbrevs and metaig_words 
 # add them to the list of flags
 	for name in abbrevs:
@@ -112,16 +114,17 @@ def ext_strat_phrases():
 # At this point, flag_words should have: Macrostrat strat names, lith names, and manually-entered names
 	# alphabetize flag words:
 	flag_words = sorted(flag_words, key=str.lower)
-	print(flag_words)
+	#print(flag_words)
 
 # ================== #
 # STOP / BAD WORDS
 # ================== #
-# STOP WORDS (which are the most common words in english -- words usually skipped by search engines)
-	#stop_words = get_stop_words('english') # these all have a u in front of them?
-	#stop_words = [i.encode('ascii','ignore') for i in stop_words] # this gets rid of the u...
-	#alpha = list(string.ascii_lowercase); # every letter in the alphabet, lowercase
-	#alpha_period = [i+'.' for i in alpha]   # every letter + a period, lowercase
+
+	#stop words (which are the most common words in english -- words usually skipped by search engines)
+	stop_words = get_stop_words('english') # these all have a u in front of them?
+	#stop_words = [i.encode('ascii','ignore') for i in stop_words] # new stop-words package doesn't have u? or python3 thing?
+	alpha = list(string.ascii_lowercase); # every letter in the alphabet, lowercase
+	alpha_period = [i+'.' for i in alpha]   # every letter + a period, lowercase
 	#stop_words = stop_words + ['lower','upper','research'] + alpha + alpha_period # add three words that were problematic at one point + the letters to the list of stop words
 
 
@@ -146,12 +149,58 @@ def ext_strat_phrases():
 # will this take forever???
 
 # loop through the rows with flag words in them
+	#i = 0
 	for row in res:
+		docid,sentid,wordidx,words,poses,ners,lemmas,dep_paths,dep_parents = row
+		flag_id = 0
+		flag_word = ''
+		
+		indices = []
+		strat_phrase = []
+
+		i = 0
+		for word in words:
+			i += 1
+
+			if word in flag_words: # discover a flag word
+				indices.append(i) # add this word's id 
+            	# will analyze preceding words:
+				preceding_words = []
+				j = 2
+				flag = word
+				flag_id = i
+				while (i-j)>(-1) and len(words[i-j])!=0 and words[i-j] != words[i-j+1] and words[i-j][0].isupper() and words[i-j] not in flag_words and words[i-j].lower() not in stop_words and re.findall(r'\d+',  words[i-j])==[]:
+					preceding_words.append(words[i-j])
+					indices.append((i-j))
+					j += 1
+				preceding_words.reverse()
+				flag_string = preceding_words
+				#print(words[i-2])
+				#if  word in flag_words and words[i-2][0].isupper() and words[i-2] not in flag_words:
+				#	flag = word
+					#flag_id = poses[i-1] # test : are all NN?
+				#	flag_string = flag + ' ' + words[i-2]
+
+				# keeping the table update inside the 'if' statement will record multiple instances per sentence.
+				stmt = insert(table).values(
+					docid=docid,
+					sentid=sentid,
+					strat_flag=flag,
+					strat_name_full=" ".join(str(i) for i in preceding_words),
+					#strat_mention=" ".join(str(i) for i in words),
+					strat_mention=flag_string,
+					sentence=" ".join(str(i) for i in words),
+					flag_id=flag_id,
+					mention_idx=flag_id)
+				session.execute(stmt)
+
+	session.commit()
+
+
+
+
+
 		# GDDTools Sentence converts a line in the sentences table
-		sentence = Sentence(row)
+		#sentence = Sentence(row)
 		# check results if you want:
 		#print(sentence)
-
-
-
-
